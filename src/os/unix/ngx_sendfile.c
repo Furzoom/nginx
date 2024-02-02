@@ -18,6 +18,28 @@
      -1 error
 */
 
+int ngx_sendfile(ngx_socket_t s,
+                 ngx_iovec_t *headers, int hdr_cnt,
+                 ngx_file_t fd, off_t offset, size_t nbytes,
+                 ngx_iovec_t *trailers, int trl_cnt,
+                 off_t *sent,
+                 ngx_log_t *log)
+{
+  int i;
+  for (i = 0; i < hdr_cnt; i++) {
+    write(s, headers[i].iov_base, headers[i].iov_len);
+  }
+  sendfile(s, fd, offset, nbytes);
+  for (i = 0; i < trl_cnt; i++) {
+    write(s, trailers[i].iov_base, trailers[i].iov_len);
+  }
+
+  ngx_log_debug(log, "ngx_sendfile: %d, @%qd %d:%qd" _
+  rc _ offset _ nbytes _ *sent);
+  return 0;
+}
+
+
 #if (HAVE_FREEBSD_SENDFILE)
 
 int ngx_sendfile(ngx_socket_t s,

@@ -8,6 +8,7 @@
 #include <ngx_server.h>
 #include <ngx_connection.h>
 #include <ngx_listen.h>
+#include <ngx_event.h>
 
 /*
 #include <ngx_http.h>
